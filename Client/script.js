@@ -2,26 +2,29 @@
 var socket = io.connect('https://kozaki-chat.herokuapp.com/', { 'forceNew': true });
 
 var date = new Date();
-var time = date.toString();
+/*
+var day = date.toLocaleDateString();
+var time = date.toLocaleTimeString();
+*/
+var day = date.toString();
+var time = date.toTimeString();
 
-var user = prompt("Enter your nickname: ");
+var user = prompt("Enter your name");
 
-//Conexión al servidor y recibir mensajes
 socket.on('messages', function(data) {
+    //console.log(data);
     render(data);
 });
 
-//Recibir mensajes y mostrar
 function render(data) {
-    //ForEach
     var html = data.map(function(object, index) {
         return (`
             <div class="message">
-            <strong>${object.username} : </strong> 
-            <p>${object.message} <br> <br> ${object.date}  </p>
+            <strong>${object.nickname} : </strong> 
+            <p>${object.text} <br> <br> ${object.date}  </p>
             </div>
         `);
-    }).join("  ");
+    }).join("   ");
 
     var div_msg = document.getElementById("content");
     div_msg.innerHTML = html;
@@ -30,11 +33,13 @@ function render(data) {
 
 function addMessage(event) {
     var message = {
-        username: this.user,
-        message: document.getElementById("msj").value,
-        date: this.time,
+        //nickname: document.getElementById("username").value,
+        nickname: this.user,
+        text: document.getElementById("msj").value,
+        date: this.day,
+        time: this.time
     }
-    socket.emit('addMessage', message);
+    socket.emit("addMessage", message);
     event.reset();
     return false;
 }
