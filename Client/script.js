@@ -1,5 +1,5 @@
 //Connection to the socket
-var socket = io.connect('localhost:5000', { 'forceNew': true });
+var socket = io.connect('https://kozaki-chat.herokuapp.com/', { 'forceNew': true });
 
 var date = new Date();
 var time = date.toString();
